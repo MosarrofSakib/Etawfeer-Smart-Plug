@@ -1,0 +1,80 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex justify-center mt-10">
+  <div
+    class="w-full max-w-4xl bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-6"
+  >
+    <!-- Back Button and Sub-Navigation -->
+    <div class="flex items-center justify-between mb-4">
+      {% if request.path.startswith('/automations/') %}
+      <!-- If we are in Edit Automation, go back to Automations -->
+      <a
+        href="{{ get_url('user_bp.user_detail', user_id=user.id, view='automations') }}"
+        class="text-gray-600 hover:text-black flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </a>
+      {% else %}
+      <!-- If we are in User Detail (Automations or Edit Profile), go back to Users -->
+      <a
+        href="{{ get_url('user_bp.users') }}"
+        class="text-gray-600 hover:text-black flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </a>
+      {% endif %}
+
+      <nav class="flex gap-4">
+        <a
+          href="{{ get_url('user_bp.user_detail', user_id=user.id, view='automations') }}"
+          class="px-4 py-2 {{ 'text-blue-500 border-b-4 border-blue-500' if view == 'automations' else 'hover:bg-gray-600 hover:text-white' }}"
+        >
+          Automations
+        </a>
+        <a
+          href="{{ get_url('recommendation_bp.view_recommendations', user_id=user.id) }}"
+          class="px-4 py-2 {{ 'text-blue-500 border-b-4 border-blue-500' if request.path.startswith('/recommendations') else 'hover:bg-gray-600 hover:text-white' }}"
+        >
+          Recommendations
+        </a>
+        <a
+          href="{{ get_url('user_bp.user_detail', user_id=user.id, view='edit') }}"
+          class="px-4 py-2 {{ 'text-blue-500 border-b-4 border-blue-500' if view == 'edit' else 'hover:bg-gray-600 hover:text-white' }}"
+        >
+          Edit Profile
+        </a>
+      </nav>
+    </div>
+
+    <!-- Dynamic Content Block -->
+    {% block user_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

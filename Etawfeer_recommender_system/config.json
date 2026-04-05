@@ -1,0 +1,17 @@
+{
+  "name": "E-Tawfeer Recommender System",
+  "version": "0.0.1",
+  "slug": "etawfeerrec",
+  "description": "E-Tawfeer Recommender System with MM classes",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "startup": "application",
+  "boot": "auto",
+  "ingress": true,
+  "ingress_port": 5000,
+  "hassio_api": true,
+  "hassio_role": "admin",
+  "homeassistant_api": true,
+  "options": { "ssl": "false" },
+  "schema": { "ssl": "bool" },
+  "map": ["config", "ssl", "addons:rw", "backup", "share"]
+}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %} {% block title %}User Details - {{ user.name }}{%
+endblock %} {% block content %}
+<div class="flex justify-center mt-10">
+  <div
+    class="w-full max-w-4xl bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-6"
+  >
+    <!-- Back Button and Sub-navigation -->
+    <div class="flex items-center justify-between mb-4">
+      <a href="/users" class="text-gray-600 hover:text-black flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </a>
+      <nav class="flex justify-center gap-4">
+        <a
+          class="px-4 py-2 {{ 'text-blue-500 border-b-4 border-blue-500' if view == 'automations' else 'hover:bg-gray-600 hover:text-white' }}"
+          href="?view=automations"
+        >
+          Automations
+        </a>
+        <a
+          class="px-4 py-2 {{ 'text-blue-500 border-b-4 border-blue-500' if view == 'edit' else 'hover:bg-gray-600 hover:text-white' }}"
+          href="?view=edit"
+        >
+          Edit Profile
+        </a>
+      </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="p-4">
+      {% if view == "automations" %}
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Automations</h2>
+        <a
+          href="{{ url_for('automation_bp.create_automation', user_id=user.id) }}"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Create Automation
+        </a>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        {% for automation in automations %}
+        <a
+          href="{{ url_for('automation_bp.edit_automation', automation_id=automation.id) }}"
+          class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-xs p-4 block"
+        >
+          <div
+            class="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-200"
+          >
+            <h3 class="font-bold text-lg text-gray-800">
+              {{ automation.title }}
+            </h3>
+            <p class="text-gray-600">
+              <strong>Trigger:</strong> {{ automation.measurementbysensor }}
+            </p>
+            <p class="text-gray-600">
+              <strong>Power Specs:</strong> {{ automation.power_specs }}
+            </p>
+            <p class="text-gray-600">
+              <strong>Interval:</strong> {{ automation.interval }} minutes
+            </p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% elif view == "edit" %}
+      <h2 class="text-xl font-bold mb-4">Edit User Profile</h2>
+      <form
+        action="/users/{{ user.id }}/edit"
+        method="post"
+        class="w-full max-w-lg"
+      >
+        <div class="mb-2">
+          <label for="name" class="block font-medium">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{ user.name }}"
+            required
+            class="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div class="mb-2">
+          <label for="device" class="block font-medium">Device:</label>
+          <input
+            type="text"
+            id="device"
+            name="device"
+            value="{{ user.device }}"
+            required
+            class="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div class="mb-2">
+          <label for="country" class="block font-medium">Country:</label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            value="{{ user.country }}"
+            required
+            class="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div class="mb-2">
+          <label for="ios_device" class="inline-flex items-center font-medium">
+            <input
+              type="checkbox"
+              id="ios_device"
+              name="ios_device"
+              {%
+              if
+              user.ios_device
+              %}checked{%
+              endif
+              %}
+              class="mr-2"
+            />
+            iOS Device
+          </label>
+        </div>
+
+        <input
+          type="submit"
+          value="Update User"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+        />
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+env/*
+instance/*
+migrations/*
+fix_time.py
+test.py
+celerybeat*
+.env
+
+__pycache__/*

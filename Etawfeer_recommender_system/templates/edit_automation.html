@@ -1,0 +1,34 @@
+{% extends 'user_base.html' %}
+
+{% block user_content %}
+<h1 class="text-2xl font-bold text-center mb-4">Edit Automation</h1>
+
+<form action="{{ get_url('automation_bp.edit_automation', automation_id=automation.id) }}" method="post" class="w-full">
+    <div class="mb-2">
+        <label for="title" class="block font-medium">Title:</label>
+        <input type="text" id="title" name="title" value="{{ automation.title }}" required class="w-full p-2 border border-gray-300 rounded"/>
+    </div>
+
+    <div class="mb-2">
+        <label for="interval" class="block font-medium">Automation Interval (minutes):</label>
+        <select id="interval" name="interval" class="w-full p-2 border border-gray-300 rounded">
+            <option value="1" {% if automation.interval == 1 %}selected{% endif %}>1 minute</option>
+            <option value="15" {% if automation.interval == 15 %}selected{% endif %}>15 minutes</option>
+            <option value="30" {% if automation.interval == 30 %}selected{% endif %}>30 minutes</option>
+            <option value="45" {% if automation.interval == 45 %}selected{% endif %}>45 minutes</option>
+            <option value="60" {% if automation.interval == 60 %}selected{% endif %}>1 hour</option>
+        </select>
+    </div>
+
+    <input type="submit" value="Update Automation" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"/>
+
+</form>
+
+<!-- Delete Automation Button -->
+<form action="{{ get_url('automation_bp.delete_automation', automation_id=automation.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this automation?');">
+    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Delete Automation
+    </button>
+</form>
+
+{% endblock %}

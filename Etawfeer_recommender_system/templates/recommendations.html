@@ -1,0 +1,273 @@
+{% extends 'user_base.html' %} {% block user_content %}
+<h1 class="text-2xl font-bold text-center mb-4">Recommendations</h1>
+
+<!-- Tab Buttons -->
+<div class="flex justify-center gap-4 mb-4">
+  <button
+    id="pending-tab"
+    class="tab-button px-4 py-2 font-bold border-b-2 border-blue-500"
+    onclick="showTab('pending')"
+  >
+    Pending
+  </button>
+  <button
+    id="processed-tab"
+    class="tab-button px-4 py-2 font-bold border-b-2 border-transparent hover:border-blue-500"
+    onclick="showTab('processed')"
+  >
+    Processed
+  </button>
+  <button
+    onclick="refreshPage()"
+    class="ml-2 text-xl hover:text-blue-600 transition"
+    title="Refresh"
+  >
+    🔄
+  </button>
+</div>
+
+<!-- Pending Recommendations (Default Tab) -->
+<div id="pending">
+  <h2 class="text-lg font-semibold mb-2">Pending Recommendations</h2>
+  {% if pending_recommendations %}
+  <div class="space-y-4">
+    {% for recommendation in pending_recommendations %}
+    <div class="border border-gray-300 p-4 rounded w-full bg-gray-100">
+      <!-- Card Header -->
+      <h3 class="font-bold text-lg text-gray-800 mb-2">
+        Recommendation for {{ recommendation.automation.title }} Automation
+      </h3>
+
+      <!-- Recommendation Message -->
+      <p class="text-gray-700">{{ recommendation.message }}</p>
+
+      <!-- MM Class -->
+      <p class="text-sm text-gray-600">
+        MM Class: {{ recommendation.mm_class }}
+      </p>
+
+      <!-- Generated Time -->
+      <p class="text-sm text-gray-500">
+        Generated at: {% set now = now() %} {% if
+        recommendation.generated_time.date() == now.date() %} {{
+        recommendation.generated_time.strftime('%I:%M %p') }}
+        <span class="text-green-600">(Today)</span> {% elif
+        recommendation.generated_time.date() == (now - timedelta(days=1)).date()
+        %} {{ recommendation.generated_time.strftime('%I:%M %p') }}
+        <span class="text-yellow-600">(Yesterday)</span>
+        {% else %}
+        <span class="">
+          {{ recommendation.generated_time.strftime('%I:%M %p') }}
+          <span class="text-orange-600"
+            >({{ recommendation.generated_time.strftime('%B %d') }})</span
+          >
+        </span>
+        {% endif %}
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="mt-2 flex gap-2">
+        <!-- Accept Button -->
+        <form
+          action="{{ get_url('recommendation_bp.accept_recommendation', recommendation_id=recommendation.id) }}"
+          method="post"
+          onsubmit="return refreshPendingList()"
+        >
+          <button
+            type="submit"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
+          >
+            Accept
+          </button>
+        </form>
+
+        <!-- Reject Button -->
+        <form
+          action="{{ get_url('recommendation_bp.reject_recommendation', recommendation_id=recommendation.id) }}"
+          method="post"
+          onsubmit="return refreshPendingList()"
+        >
+          <button
+            type="submit"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+          >
+            Reject
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <p>No pending recommendations.</p>
+  {% endif %}
+</div>
+
+<!-- Processed Recommendations -->
+<div id="processed" class="hidden">
+  <h2 class="text-lg font-semibold mb-2">Processed Recommendations</h2>
+  {% if processed_recommendations %}
+  <div class="space-y-4">
+    {% for recommendation in processed_recommendations %}
+    <div
+      class="border border-gray-300 p-4 rounded w-full bg-gray-100 shadow-md"
+      id="recommendation-{{ recommendation.id }}"
+    >
+      <!-- 🏷️ Card Header -->
+      <h3 class="font-bold text-lg text-gray-800 mb-2">
+        Recommendation for
+        <span class="">{{ recommendation.automation.title }}</span> Automatiom
+      </h3>
+
+      <!-- 📝 Recommendation Message -->
+      <p class="text-gray-700 font-medium">{{ recommendation.message }}</p>
+
+      <!-- 📌 MM Class -->
+      <p class="text-sm text-gray-600 font-semibold">
+        MM Class:
+        <span class="text-blue-500">{{ recommendation.mm_class }}</span>
+      </p>
+
+      <!-- ✅ Action Taken Status -->
+      <p class="text-sm text-gray-500">
+        Action Taken: {% if recommendation.action_taken == "accepted" %}
+        <span class="text-green-600 font-semibold">Accepted</span>
+        {% else %}
+        <span class="text-red-600 font-semibold">Rejected</span>
+        {% endif %}
+      </p>
+
+      <!-- ⏳ Generated At Time -->
+      <p class="text-sm text-gray-500">
+        Generated at: {% set now = now() %} {% if
+        recommendation.generated_time.date() == now.date() %} {{
+        recommendation.generated_time.strftime('%I:%M %p') }}
+        <span class="text-green-600">(Today)</span> {% elif
+        recommendation.generated_time.date() == (now - timedelta(days=1)).date()
+        %} {{ recommendation.generated_time.strftime('%I:%M %p') }}
+        <span class="text-yellow-600">(Yesterday)</span>
+        {% else %}
+        <span class="">
+          {{ recommendation.generated_time.strftime('%I:%M %p') }}
+          <span class="text-orange-600"
+            >({{ recommendation.generated_time.strftime('%B %d') }})</span
+          >
+        </span>
+        {% endif %}
+      </p>
+
+      <!-- ⏰ Processed At Time -->
+      <p class="text-sm text-gray-500">
+        Processed at: {% if recommendation.action_time.date() == now.date() %}
+        {{ recommendation.action_time.strftime('%I:%M %p') }}
+        <span class="text-green-600">(Today)</span> {% elif
+        recommendation.action_time.date() == (now - timedelta(days=1)).date() %}
+        {{ recommendation.action_time.strftime('%I:%M %p') }}
+        <span class="text-yellow-600">(Yesterday)</span>
+        {% else %}
+        <span class="">
+          {{ recommendation.action_time.strftime('%I:%M %p') }}
+          <span class="text-orange-600"
+            >({{ recommendation.action_time.strftime('%B %d') }})</span
+          >
+        </span>
+        {% endif %}
+      </p>
+
+      <!-- 🗑️ Delete Button -->
+      <button
+        onclick="deleteRecommendation({{ recommendation.id }})"
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded transition-all"
+      >
+        ❌ Delete
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <p>No processed recommendations.</p>
+  {% endif %}
+</div>
+
+<!-- JavaScript for Tab Switching -->
+<script>
+  function showTab(tab) {
+    // Toggle the hidden class for content sections
+    document
+      .getElementById("pending")
+      .classList.toggle("hidden", tab !== "pending");
+    document
+      .getElementById("processed")
+      .classList.toggle("hidden", tab !== "processed");
+
+    // Update active tab styles
+    document
+      .getElementById("pending-tab")
+      .classList.toggle("border-b-2", tab === "pending");
+    document
+      .getElementById("pending-tab")
+      .classList.toggle("border-blue-500", tab === "pending");
+    document
+      .getElementById("pending-tab")
+      .classList.toggle("text-black", tab === "pending");
+
+    document
+      .getElementById("processed-tab")
+      .classList.toggle("border-b-2", tab === "processed");
+    document
+      .getElementById("processed-tab")
+      .classList.toggle("border-blue-500", tab === "processed");
+    document
+      .getElementById("processed-tab")
+      .classList.toggle("text-black", tab === "processed");
+
+    // Remove inactive styles
+    document
+      .getElementById("pending-tab")
+      .classList.toggle("border-transparent", tab !== "pending");
+    document
+      .getElementById("processed-tab")
+      .classList.toggle("border-transparent", tab !== "processed");
+
+    // Store selected tab in local storage
+    localStorage.setItem("selectedTab", tab);
+  }
+
+  // Ensure we stay on "Pending" after Accept/Reject
+  function refreshPendingList() {
+    localStorage.setItem("selectedTab", "pending");
+  }
+
+  // Load last selected tab or default to "Pending"
+  document.addEventListener("DOMContentLoaded", function () {
+    let savedTab = localStorage.getItem("selectedTab") || "pending";
+    showTab(savedTab);
+  });
+
+  function deleteRecommendation(recommendationId) {
+    fetch(`/recommendations/delete/${recommendationId}`, { method: "POST" })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          /* let recommendationElement = document.getElementById(
+            `recommendation-${recommendationId}`
+          );
+          if (recommendationElement) {
+            recommendationElement.remove(); // ✅ Remove only the deleted recommendation
+          } */
+          location.reload();
+        } else {
+          console.error("Failed to delete:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error deleting:", error));
+  }
+
+  function refreshPage() {
+    location.reload();
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'user_base.html' %} {% block user_content %} {% if view ==
+"automations" %}
+<h2 class="text-xl font-bold mb-4">Automations</h2>
+<div class="flex justify-between items-center mb-4">
+  <a
+    href="{{ get_url('automation_bp.create_automation', user_id=user.id) }}"
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+  >
+    Create Automation
+  </a>
+</div>
+
+<div class="flex flex-wrap gap-4">
+  {% for automation in automations %}
+  <a
+    href="{{ get_url('automation_bp.edit_automation', automation_id=automation.id) }}"
+    class="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 max-w-xs p-4 block"
+  >
+    <div
+      class="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-200"
+    >
+      <h3 class="font-bold text-lg text-gray-800">{{ automation.title }}</h3>
+      <p class="text-gray-600">
+        <strong>Consumption:</strong> {{ power }} W
+      </p>
+      <p class="text-gray-600">
+        <strong>Interval:</strong> {{ automation.interval }} minutes
+      </p>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% elif view == "edit" %}
+<h1 class="text-2xl font-bold text-center mb-4">Edit User Profile</h1>
+
+<!-- ✅ Edit Form (unstyled like delete form) -->
+<form
+  action="{{ get_url('user_bp.edit_user', user_id=user.id) }}"
+  method="post"
+  class="w-full max-w-3xl mx-auto"
+>
+  <!-- Name -->
+  <div class="mb-4">
+    <label for="name" class="block font-medium mb-1">Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value="{{ user.name }}"
+      required
+      class="w-full p-2 border border-gray-300 rounded"
+    />
+  </div>
+
+  <!-- Device -->
+  <div class="mb-4">
+    <label for="device" class="block font-medium mb-1">Device:</label>
+    <select
+      id="device"
+      name="device"
+      required
+      class="w-full p-2 border border-gray-300 rounded"
+    >
+      <option value="" disabled>Select a device</option>
+      {% for device in notify %}
+      <option value="{{ device }}" {% if user.device == device %}selected{% endif %}>
+        {{ device }}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Country -->
+  <div class="mb-4">
+    <label for="country" class="block font-medium mb-1">Country:</label>
+    <select
+      id="country"
+      name="country"
+      required
+      class="w-full p-2 border border-gray-300 rounded"
+    >
+      <option value="Qatar" {% if user.country == 'Qatar' %}selected{% endif %}>
+        Qatar
+      </option>
+    </select>
+  </div>
+
+  <!-- Update Button -->
+  <input
+    type="submit"
+    value="Update User"
+    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
+  />
+</form>
+
+<!-- ✅ Delete Button (unchanged) -->
+<form
+  action="{{ get_url('user_bp.delete_user', user_id=user.id) }}"
+  method="post"
+  class="w-full max-w-3xl mx-auto mt-4"
+  onsubmit="return confirm('Are you sure you want to delete this user?');"
+>
+  <button
+    type="submit"
+    class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-3 rounded-lg"
+  >
+    Delete User
+  </button>
+</form>
+
+
+
+{% endif %} {% endblock %}

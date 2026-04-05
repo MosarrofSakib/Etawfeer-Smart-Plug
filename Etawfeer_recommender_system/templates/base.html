@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-white text-black">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}E-Tawfeer Recommender System{% endblock %}</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-white text-black">
+    <!-- 🔷 Full-width Top Bar -->
+    <!-- 🔷 Full-width Blue Top Bar with Centered Title -->
+    <header class="bg-[#03A9F4] text-white py-3">
+      <div class="max-w-7xl mx-auto px-4">
+        <h1 class="text-3xl font-semibold text-center">
+          E-Tawfeer Recommender System
+        </h1>
+      </div>
+    </header>
+
+    <!-- ✅ Page Content Container -->
+    <div class="max-w-7xl mx-auto px-4 mt-6">
+      <nav class="flex justify-center gap-6 mb-6" id="navbar">
+        <a
+          href="{{ get_url('home_bp.home') }}"
+          class="px-4 py-2 rounded {% if request.path == '/' %}text-blue-500 border-b-4 border-blue-500{% else %}hover:bg-gray-600 hover:text-white{% endif %}"
+          >Home</a
+        >
+        <a
+          href="{{ get_url('user_bp.users') }}"
+          class="px-4 py-2 rounded {% if request.path != '/' %}text-blue-500 border-b-4 border-blue-500{% else %}hover:bg-gray-600 hover:text-white{% endif %}"
+          >Users</a
+        >
+      </nav>
+
+      <!-- Your main content -->
+      <div class="content">{% block content %}{% endblock %}</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block title %}Home - E-Tawfeer Recommender System{%
+endblock %} {% block content %}
+<div class="max-w-3xl mx-auto mt-10 px-4">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">
+    Welcome to E-Tawfeer Recommender System
+  </h2>
+
+  <p class="text-gray-700 leading-relaxed mb-4">
+    <strong>E-Tawfeer</strong> is an intelligent energy-saving recommender
+    system designed to monitor your device usage and help you reduce electricity
+    consumption efficiently. Whether you’re at home or away, E-Tawfeer keeps
+    track of how your appliances behave — and recommends smart actions like
+    turning them off when idle or when you're not present.
+  </p>
+
+  <p class="text-gray-700 leading-relaxed mb-4">
+    The system uses real-time power readings from connected smart plugs or
+    energy monitors, applies machine learning models to detect patterns, and
+    classifies behaviors into energy-saving categories (Micro-Moment classes).
+    Based on the detected class, it generates personalized notifications with
+    economic and environmental insights to guide better usage.
+  </p>
+
+  <p class="text-gray-700 leading-relaxed mb-4">
+    <strong>Recommendation messages</strong> are sent directly to the user's
+    mobile phone through the <strong>Home Assistant mobile app</strong>. From
+    there, users can <em>accept</em> or <em>reject</em> the recommendation with
+    a single tap. Their response is logged in the system and used to improve
+    future recommendations.
+  </p>
+
+  <p class="text-gray-700 leading-relaxed mb-4">
+    The system also visualizes your power consumption trends over the last 24
+    hours, 7 days, or 30 days to help you stay aware of your habits and track
+    your impact.
+  </p>
+
+  <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-6 rounded">
+    <p class="text-blue-800">
+      💡 <strong>Pro tip:</strong> You can create automations, view personalized
+      energy recommendations, and take actions — all from this dashboard.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

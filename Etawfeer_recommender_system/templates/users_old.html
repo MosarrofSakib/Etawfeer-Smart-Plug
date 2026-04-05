@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block title %}Users - E-Tawfeer Recommender
+System{% endblock %} {% block content %}
+<div class="container mx-auto mt-10 px-4">
+  <!-- Button aligned to top-right -->
+  <div class="text-center mb-10">
+    <a
+      href="{{ get_url('user_bp.create_user_form') }}"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Create New User
+    </a>
+  </div>
+
+  <!-- Centered Users Content -->
+  <div class="flex flex-wrap justify-center gap-6">
+    {% for user in users %}
+    <a
+      href="{{ get_url('user_bp.user_detail', user_id=user.id) }}"
+      class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-xs block"
+    >
+      <div
+        class="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-200"
+      >
+        <h2 class="font-bold text-lg text-gray-800">{{ user.name }}</h2>
+        <p class="text-gray-600"><strong>Device:</strong> {{ user.device }}</p>
+        <p class="text-gray-600">
+          <strong>Profile:</strong> {{ user.profile | default('N/A') }}
+        </p>
+        <p class="text-gray-600">
+          <strong>Country:</strong> {{ user.country }}
+        </p>
+        <p class="text-gray-600">
+          <strong>iOS:</strong> {{ 'Yes' if user.ios_device else 'No' }}
+        </p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

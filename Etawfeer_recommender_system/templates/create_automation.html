@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block title %}Create Automation{% endblock %} {%
+block content %}
+<div class="flex justify-center mt-10">
+  <div
+    class="w-full max-w-3xl bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-6"
+  >
+    <!-- Back Button -->
+    <div class="flex items-center mb-4">
+      <a
+        href="{{ get_url('user_bp.user_detail', user_id=user_id, view='automations') }}"
+        class="text-gray-600 hover:text-black flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </a>
+    </div>
+
+    <h1 class="text-2xl font-bold text-center mb-4">Create Automation</h1>
+    <form
+      action="{{ get_url('automation_bp.create_automation', user_id=user_id) }}"
+      method="post"
+      class="w-full"
+    >
+      <div class="mb-2">
+        <label for="title" class="block font-medium">Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          required
+          class="w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
+
+      <div class="mb-2">
+        <label for="interval" class="block font-medium"
+          >Automation Interval (minutes):</label
+        >
+        <select
+          id="interval"
+          name="interval"
+          class="w-full p-2 border border-gray-300 rounded"
+        >
+          <option value="1">1 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="60">1 hour</option>
+        </select>
+      </div>
+
+      <input
+        type="submit"
+        value="Create Automation"
+        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+      />
+    </form>
+  </div>
+</div>
+{% endblock %}
