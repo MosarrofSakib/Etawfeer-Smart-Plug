@@ -1,6 +1,6 @@
 # E-Tawfeer Smart Plug
 
-This repository contains the implementation of an energy optimization system based on smart plug data, combining **supervised learning**, **federated learning (SSFL)**, and a **real-time recommender system**.
+This repository contains the implementation of E-Tawfeer smart plug system, including **supervised learning**, **federated learning (SSFL)**, and a **real-time recommender system**.
 
 ---
 
